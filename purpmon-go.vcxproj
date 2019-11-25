@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClInclude Include="const.h" />
     <ClInclude Include="logic.h" />
+    <ClInclude Include="map4plr.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="ronia.h" />
     <ClInclude Include="shop.h" />
@@ -136,6 +137,7 @@
     <ClCompile Include="playerRed.cpp" />
     <ClCompile Include="ronia.cpp" />
     <ClCompile Include="shop.cpp" />
+    <ClCompile Include="map4plr.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -30,6 +30,9 @@
     <ClInclude Include="player.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="map4plr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ronia.cpp">
@@ -48,6 +51,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="playerBlue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="map4plr.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

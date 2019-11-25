@@ -4,7 +4,7 @@
 
 //你可以任意定义全局变量
 
-int Player::playerRedAI(int mode) {
+int Player::playerRedAI(int mode, Map4Plr map) {
 	//你可以任意定义局部变量
 
 	//你可以在这里任意发挥，

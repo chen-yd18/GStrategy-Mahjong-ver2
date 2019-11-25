@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "logic.h"
-#include<stdio.h>
+#include "map4plr.h"
+#include <stdio.h>
 
 Logic* Logic::logic = nullptr;
 
@@ -30,7 +31,9 @@ void Logic::updateMap() {
 
 void Logic::SinglePlayerRun(int pl) {
 	if (army[pl].countCard() == 13)return;
-	int op = pl == RED ? players.playerRedAI(0) : players.playerBlueAI(0);
+	Map4Plr map(nodeCDleft);
+	int op = pl == RED ? players.playerRedAI(0, map) 
+		: players.playerBlueAI(0, map);
 	int M = nodeU[pos[pl] + 1] - nodeU[pos[pl]];
 	op = (op % M + M) % M;
 	printf("MOVE %d %d %d\n", pl, pos[pl], edgeV[nodeU[pos[pl]] + op]);
@@ -45,7 +48,8 @@ void Logic::SinglePlayerRun(int pl) {
 			coin[pl] += nodeCDleft[pos[pl]];
 			shop.generate();
 			printf("LAB %d %d\n", shop.view() / 10, shop.view() % 10);
-			int op2 = pl == RED ? players.playerRedAI(shop.view()) : players.playerBlueAI(shop.view());
+			int op2 = pl == RED ? players.playerRedAI(shop.view(), map) 
+				: players.playerBlueAI(shop.view(), map);
 			op2 = (op2 % CHOICE_COUNT + CHOICE_COUNT) % CHOICE_COUNT;
 			shop.take(op2);
 			printf("ADDMAJ %d %d\n", pl, op2);
