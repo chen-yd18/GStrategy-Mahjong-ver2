@@ -4,7 +4,7 @@ const int NODE_COUNT = 64;//结点数
 const int EDGE_COUNT = 112;//双向道路数
 const int NODE_START = 6;//起点编号
 const int CHOICE_COUNT = 2;//实验室内选项个数
-const int TURN_COUNT = 100;//回合数，必须为偶数
+const int TURN_COUNT = 100;//回合数
 const int PLAYER_COUNT = 2;//玩家数量
 enum player { RED, BLUE };//玩家代号
 

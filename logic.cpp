@@ -2,6 +2,7 @@
 #include "logic.h"
 #include "map4plr.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 Logic* Logic::logic = nullptr;
 
@@ -31,7 +32,7 @@ void Logic::updateMap() {
 
 void Logic::SinglePlayerRun(int pl) {
 	if (army[pl].countCard() == 13)return;
-	Map4Plr map(nodeCDleft);
+	Map4Plr map(nodeCDleft, pos[pl]);
 	int op = pl == RED ? players.playerRedAI(0, map) 
 		: players.playerBlueAI(0, map);
 	int M = nodeU[pos[pl] + 1] - nodeU[pos[pl]];
@@ -48,8 +49,9 @@ void Logic::SinglePlayerRun(int pl) {
 			coin[pl] += nodeCDleft[pos[pl]];
 			shop.generate();
 			printf("LAB %d %d\n", shop.view() / 10, shop.view() % 10);
-			int op2 = pl == RED ? players.playerRedAI(shop.view(), map) 
-				: players.playerBlueAI(shop.view(), map);
+			Map4Plr map2(nodeCDleft, pos[pl]);
+			int op2 = pl == RED ? players.playerRedAI(shop.view(), map2) 
+				: players.playerBlueAI(shop.view(), map2);
 			op2 = (op2 % CHOICE_COUNT + CHOICE_COUNT) % CHOICE_COUNT;
 			shop.take(op2);
 			printf("ADDMAJ %d %d\n", pl, op2);
@@ -61,13 +63,16 @@ void Logic::SinglePlayerRun(int pl) {
 }
 
 void Logic::GameRun() {
-	for (int i = 1; i <= TURN_COUNT / 2; i++) {
+	for (int i = 1; i <= TURN_COUNT; i++) {
 		updateMap();
-		SinglePlayerRun(RED);
-		SinglePlayerRun(BLUE);
-		updateMap();
-		SinglePlayerRun(BLUE);
-		SinglePlayerRun(RED);
+		if (rand() % 2) {
+			SinglePlayerRun(RED);
+			SinglePlayerRun(BLUE);
+		}
+		else {
+			SinglePlayerRun(BLUE);
+			SinglePlayerRun(RED);
+		}
 	}
 	printf("RED %d %d\n", army[RED].calcTing(), army[RED].calcScore());
 	printf("BLUE %d %d\n", army[BLUE].calcTing(), army[BLUE].calcScore());

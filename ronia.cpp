@@ -1,4 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "ronia.h"
+#include <stdio.h>
 
 const int ronia::mianzi[MZ_COUNT]={0000000111,0000001110,0000011100,0000111000,0001110000,0011100000,0111000000,
 	0000000003,0000000030,0000000300,0000003000,0000030000,0000300000,0003000000,0030000000,0300000000};
@@ -25,6 +27,7 @@ bool ronia::dfs(int remain){
 	return 0;
 }
 int ronia::calcTing(){
+	if (countCard() != 13)return 0;
 	int remain=0;
 	for(int i=0;i<9;i++)
 		remain|=(cardcount[i+1]<<(3*i));
@@ -43,7 +46,9 @@ int ronia::countCard() {
 	int ans = 0;
 	for (int i = 1; i <= 9; i++) {
 		ans += cardcount[i];
+		//printf("%d ", cardcount[i]);
 	}
+	//printf("\n");
 	return ans;
 }
 int ronia::calcScore() {
@@ -54,7 +59,7 @@ int ronia::calcScore() {
 	int score = 4*(keTot==4);
 	if (cardTot != 13) return score + cardTot;
 	int ting = calcTing();
-	int gpa = 4 * (cardcount[2] || cardcount[3] || cardcount[5] || cardcount[9]);
+	int gpa = 4 * !(cardcount[2] || cardcount[3] || cardcount[5] || cardcount[9]);
 	while (ting) {
 		score++;
 		int m = ting % 10;
