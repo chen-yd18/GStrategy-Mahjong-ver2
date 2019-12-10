@@ -7,7 +7,7 @@ int vistime[NODE_COUNT + 1];
 
 int Player::playerRedAI(int mode, Map4Plr map) {
 	//你可以任意定义局部变量
-
+	
 	//你可以在这里任意发挥，
 	//实现高明的策略，打造你的强力AI！
 	if (mode == 0) {

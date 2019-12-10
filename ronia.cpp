@@ -10,8 +10,10 @@ ronia::ronia() {
 		cardcount[i] = 0;
 }
 
-void ronia::addCard(int cardid) {
+bool ronia::addCard(int cardid) {
+	if (full(cardid))return false;
 	cardcount[cardid]++;
+	return true;
 }
 
 bool ronia::dfs(int remain){
@@ -67,4 +69,23 @@ int ronia::calcScore() {
 		ting /= 10;
 	}
 	return score + 13;
+}
+
+bool ronia::canBus() {
+	bool ok = 1;
+	for (int i = 1; i <= 8; i++)
+		if (cardcount[i] == 0)ok = 0;
+	if (ok)return 1;
+	for (int i = 2; i <= 9; i++)
+		if (cardcount[i] == 0)ok = 0;
+	return ok;
+}
+
+bool ronia::canSwim() {
+	return cardcount[5] >= 3;
+}
+
+bool ronia::full(int cardid) {
+	if (cardid < 1 || cardid>9)return true;
+	return cardcount[cardid] >= 4;
 }

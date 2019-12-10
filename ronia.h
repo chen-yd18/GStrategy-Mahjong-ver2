@@ -10,11 +10,14 @@ private:
 	int cardcount[10];//选手拥有的各种稀有精灵的个数
 public:
 	ronia();
-	void addCard(int cardid);//选手获得了属性值为cardid的稀有精灵
+	bool addCard(int cardid);//选手获得了属性值为cardid的稀有精灵
 	int countCard();//选手的稀有精灵个数
 	bool dfs(int remain);//判断八进制数remain对应的牌是否胡牌
 	int calcTing();//计算听哪些牌
 	int calcScore();//根据听牌信息和拥有的稀有精灵来计算分数
+	bool canBus();
+	bool canSwim();
+	bool full(int cardid);
 };
 
 #endif
