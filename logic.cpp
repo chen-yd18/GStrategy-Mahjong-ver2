@@ -10,6 +10,7 @@ Logic::Logic() {
 	freopen("log.txt", "w", stdout);
 	pos[RED] = pos[BLUE] = NODE_START;
 	coin[RED] = coin[BLUE] = 0;
+	finishTurn[RED] = finishTurn[BLUE] = 0;
 	for (int i = 1; i <= NODE_COUNT; i++)
 		nodeCDleft[i] = nodeCD[i];
 }
@@ -44,7 +45,8 @@ void Logic::SinglePlayerRun(int pl) {
 			||pos[pl]==22||(pos[pl]>=26&&pos[pl]<=30)||pos[pl]==42)){
 		power = 3;
 	}
-	Map4Plr map(nodeCDleft, pos[pl], coin[pl], power);
+	//if (power != 1)power = 3;//ÓÎÓ¾¼¼ÄÜ²âÊÔ
+	Map4Plr map(nodeCDleft, army[pl].getCards(), pos[pl], coin[pl], power);
 	int op = pl == RED ? players.playerRedAI(0, map) 
 		: players.playerBlueAI(0, map);
 	int M = nodeU[pos[pl] + 1] - nodeU[pos[pl]];
@@ -66,7 +68,7 @@ aftermove:	if (nodeCDleft[pos[pl]] == 0) {
 				coin[pl] += nodeCDleft[pos[pl]];
 				shop.generate();
 				printf("LAB %d %d\n", shop.view() / 10, shop.view() % 10);
-				Map4Plr map2(nodeCDleft, pos[pl], coin[pl], 0);
+				Map4Plr map2(nodeCDleft, army[pl].getCards(), pos[pl], coin[pl], 0);
 				int op2 = pl == RED ? players.playerRedAI(shop.view(), map2)
 					: players.playerBlueAI(shop.view(), map2);
 				op2 = (op2 % CHOICE_COUNT + CHOICE_COUNT) % CHOICE_COUNT;
@@ -131,7 +133,11 @@ void Logic::GameRun() {
 			SinglePlayerRun(BLUE);
 			SinglePlayerRun(RED);
 		}
+		if (finishTurn[RED]==0 && army[RED].countCard() == 13)
+			finishTurn[RED] = i;
+		if (finishTurn[BLUE]==0 && army[BLUE].countCard() == 13)
+			finishTurn[BLUE] = i;
 	}
-	printf("RED %d %d\n", army[RED].calcTing(), army[RED].calcScore());
-	printf("BLUE %d %d\n", army[BLUE].calcTing(), army[BLUE].calcScore());
+	printf("RED %d %d %d\n", army[RED].calcTing(), army[RED].calcScore(), finishTurn[RED]);
+	printf("BLUE %d %d %d\n", army[BLUE].calcTing(), army[BLUE].calcScore(), finishTurn[BLUE]);
 }

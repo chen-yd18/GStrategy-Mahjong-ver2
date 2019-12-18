@@ -10,7 +10,7 @@ int vistime[NODE_COUNT + 1];
 
 namespace sp {
 	int d[NODE_COUNT + 1];
-	void getD(int t, int po) {// 技能激活状态为po时，求出t到各点的最短路长度
+	void getD(int t, int po) {
 		std::queue<int> Q;
 		Q.push(t);
 		memset(d, -1, sizeof(d));
@@ -43,13 +43,12 @@ namespace sp {
 			}
 		}
 	}
-	int dist(int s, int t, int po) {// 技能激活状态为po时，s到t的最短路长度
+	int dist(int s, int t, int po) {
 		getD(t, po);
 		if (d[s] == -1)return 19260817;
 		return d[s];
 	}
-	int dir(int s, int t, int po) {// 技能激活状态为po时，从s出发，目标点为t，下一步应该走的方向（AI返回值）
-		if (s == t)return rand();
+	int dir(int s, int t, int po) {
 		getD(t, po);
 		for (int i = nodeU[s]; i < nodeU[s + 1]; i++) {
 			int j = edgeV[i];
@@ -72,71 +71,20 @@ namespace sp {
 				}
 			}
 		}
-		exit(233);//程序异常
+		exit(233);
 		return -1;
 	}
 	int goal = 0, bestd = 19260817;
-}
-
-namespace dp {
-	int shops[15], shopcnt;
-	int dp[15][32768], fa[2][15][32768];
-	int path[15];//依次经过的商店编号
-	void initdp() {
-		for (int i = 1; i <= NODE_COUNT; i++)
-			if (nodeCD[i] < 0) {
-				shops[shopcnt++] = i;
-			}
-		memset(dp, 0x3f, sizeof(dp));
-		dp[1][2] = 0;
-		
-				for (int j = 0; j < (1 << shopcnt); j++)
-					for (int i = 0; i < shopcnt; i++)
-						for (int k = 0; k < shopcnt; k++)
-					if (((1 << k) & j) != 0 && ((1 << i) & j) == 0) {
-						int z;
-						/*if (i == k)z = 2;
-						else*/ z = sp::dist(shops[k], shops[i], 0);
-						if (dp[k][j] + z < dp[i][j | (1 << i)]) {
-							dp[i][j | (1 << i)] = dp[k][j] + z;
-							fa[0][i][j | (1 << i)] = k;
-							fa[1][i][j | (1 << i)] = j;
-						}
-					}
-		int x = 0, y = (1 << shopcnt) - 1;
-		for (int i = 1; i < shopcnt; i++)
-			if (dp[i][y] < dp[x][y])x = i;
-		for(int i=shopcnt;y;i--) {
-			path[i] = shops[x];
-			int xx = x;
-			x = fa[0][xx][y];
-			y = fa[1][xx][y];
-		}
-		for (int i = 1; i <= shopcnt; i++)
-			printf("%d ", path[i]);
-		printf("\n");
-	}
 }
 int Player::playerRedAI(int mode, Map4Plr map) {
 	//你可以任意定义局部变量
 	
 	//你可以在这里任意发挥，
 	//实现高明的策略，打造你的强力AI！
-	if (dp::shopcnt == 0) {
-		dp::initdp();
-		sp::goal = dp::path[1];
-		sp::bestd = sp::dist(map.pos, sp::goal, map.power);
-	}
 	if (mode == 0) {
 		if (map.pos == sp::goal) {
 			sp::goal = 0;
 			sp::bestd = 19260817;
-			if (map.holding[0] + 2 <= dp::shopcnt 
-				&& map.purple >= -map.nodeCDleft[dp::path[map.holding[0] + 2]]) {
-				sp::goal = dp::path[map.holding[0]+2];
-				printf("%d\n", sp::goal);
-				sp::bestd = sp::dist(map.pos, sp::goal, map.power);
-			}
 		}
 		//try labs first
 		if (sp::goal == 0) {

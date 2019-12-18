@@ -18,6 +18,7 @@ public:
 	bool canBus();
 	bool canSwim();
 	bool full(int cardid);
+	int* const getCards() { return cardcount; }
 };
 
 #endif

@@ -10,6 +10,7 @@ private:
 	int pos[PLAYER_COUNT];//双方位置
 	ronia army[PLAYER_COUNT];//双方稀有精灵战队
 	int coin[PLAYER_COUNT];//双方紫精灵数量
+	int finishTurn[PLAYER_COUNT];//双方各自收集齐13个稀有精灵的回合
 	Shop shop;
 	Player players;
 	int nodeCDleft[NODE_COUNT+1];//这个数组非常重要！
