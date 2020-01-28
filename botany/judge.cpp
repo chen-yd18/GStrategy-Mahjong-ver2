@@ -350,11 +350,13 @@ size_t len;
         fprintf(stderr, "Side #%d errors with %d, considered resignation\n",
             pl, (int)len);
          win=pl^1;
+         return 0; 
+	} else {
+		int ret=233;
+		sscanf(resp,"%d",&ret);
+		fprintf(stderr, "Side #%d moves at %d\n", pl, ret);
+		return ret;
 	}
-	int ret=233;
-	sscanf(resp,"%d",&ret);
-	fprintf(stderr, "Side #%d moves at %d\n", pl, ret);
-	return ret;
 }
 void updateMap() {
 	printf("COIN %d %d\n", coin[RED], coin[BLUE]);
