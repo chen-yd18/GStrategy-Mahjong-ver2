@@ -23,11 +23,11 @@ enum player { RED, BLUE };//玩家代号
 
 //每个结点每隔多少回合会刷出一个紫精灵。-1表示实验室
 const int nodeCD[NODE_COUNT + 1] = {0,
-	1, -1, 999, 3, -1, 999, 999, 999,
-	999, 2, 999, 999, 999, 4, 999, 4,
+	999, -1, 999, 3, -1, 999, 999, 999,
+	999, 2, 999, 999, 999, 1, 999, 4,
 	-1, 999, 2, 999, 999, 5, -1, 999,
 	999, 3, 999, 999, -1, 999, 999, 6,
-	999, -1, 999, 999, 999, 6, 6, 999,
+	999, -1, 5, 999, 999, 6, 6, 999,
 	999, 999, 999, 2, 999, 999, 999, 999,
 	-1, -1, -1, 999, 999, 2, 999, 999,
 	999, 3, 999, 1, 999, 999, 999, -1
@@ -46,7 +46,7 @@ const int nodeU[NODE_COUNT + 2] = {0,
 	1, 5, 6, 9, 13, 19, 25, 29,
 	33, 37, 40, 44, 48, 52, 56, 59, 
 	62, 65, 67, 69, 73, 78, 82, 86, 
-	89, 93, 96, 98, 102, 105, 110, 113, 
+	90, 93, 96, 98, 102, 105, 110, 113, 
 	117, 121, 124, 126, 129, 132, 135, 139,
 	142, 146, 149, 153, 157, 160, 164, 168, 
 	172, 175, 178, 182, 185, 189, 193, 197, 
@@ -294,6 +294,7 @@ typedef struct{
 	int pos;
 	int purple;
 	int power;
+	int oppoPos;
 }GameMap;
 
 //一堆库函数 
@@ -316,12 +317,12 @@ void init() {
 
 int callBot(int mode, int pl, int power){
 	char buf[500];
-	sprintf(buf,"%d\n%d %d %d\n%d %d %d %d %d %d %d %d %d\n"
+	sprintf(buf,"%d\n%d %d %d %d\n%d %d %d %d %d %d %d %d %d\n"
 	"%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d "
 	"%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d "
 	"%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d "
 	"%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d ",
-	mode, pos[pl], coin[pl], power,
+	mode, pos[pl], coin[pl], power, pos[pl^1],
 	army[pl].getCards()[1],army[pl].getCards()[2],army[pl].getCards()[3],
 	army[pl].getCards()[4],army[pl].getCards()[5],army[pl].getCards()[6],
 	army[pl].getCards()[7],army[pl].getCards()[8],army[pl].getCards()[9],
@@ -418,11 +419,19 @@ aftermove:	if (nodeCDleft[pos[pl]] == 0) {
 	}
 	else if(op>=M){
 		op -= M - 1;
-		if (power == 1) {
+		if (power == 1) { 
+			coin[pl]-=5;//AHHH! 
+			if(nodeCDleft[1]==0){
+				nodeCDleft[1]=nodeCD[1];
+				coin[pl]++;
+			} 
 			if (!army[pl].full(op)) {
 				army[pl].addCard(op);
 				printf("DELIVER %d %d\n", pl, op);
 			}
+			else{
+				//printf("DELIVER %d 0\n", pl);
+			} 
 		}
 		if (power == 2) {
 			int oldpos = pos[pl];
